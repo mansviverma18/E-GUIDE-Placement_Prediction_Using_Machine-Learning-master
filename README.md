@@ -1,11 +1,6 @@
 E-GUIDE: Placement Prediction using Machine Learning
 E-GUIDE is an interactive E-portal designed to guide engineering students through their placement journey. By leveraging data-driven insights and machine learning, the platform predicts placement probability and estimates potential salaries while providing actionable feedback to help students enhance their employability.
 
-Final Result
-<img src="static/images/pl1.png" alt="Alt text" width=100%>
-<img src="static/images/pl2.png" alt="Alt text" width=100%>
-<img src="static/images/pl3.png" alt="Alt text" width=100%>
-
 Table of Contents
 Overview
 
