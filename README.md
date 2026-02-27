@@ -49,7 +49,7 @@ To run this project locally, follow these steps:
 - `templates/`: Contains HTML files
 - `app.py`: Main Flask App
 - `model.pkl`: Pickle file of predicting placement model
-- `model1.pkl`: Pickle file of Salary Prediction model [download through - "(https://drive.google.com/file/d/1DKbetU7Wg9-71PdZnoVERJwTHFuW6uED/view?usp=drive_link)"]
+- `model1.pkl`: Pickle file of Salary Prediction model [download through - (https://drive.google.com/file/d/1DKbetU7Wg9-71PdZnoVERJwTHFuW6uED/view?usp=drive_link)]
 - `Placement_prediction_data.csv`: Placement Prediction data
 - `Placement_prediction.py`: Model for Placement Prediction
 - `preprocessing.ipynb`: Jupyter Notebook for Data preprocessing
