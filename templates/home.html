@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-GUIDE// NEON</title>
+    
+    <!-- Google Font: Poppins for modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS Variables for Neon Theme --- */
+        :root {
+            --primary-dark: #00001a; /* Deep Space Blue/Black */
+            --neon-cyan: #00FFFF;
+            --neon-fuchsia: #FF33CC;
+            --glow-cyan: rgba(0, 255, 255, 0.6);
+            --glow-fuchsia: rgba(255, 51, 204, 0.5);
+            --card-bg: rgba(255, 255, 255, 0.05); /* Very subtle transparency */
+        }
+        
+        /* --- Base Setup and Futuristic Background --- */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            
+            /* Deep, dark space gradient */
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #000000 100%); 
+            background-attachment: fixed;
+            position: relative; 
+        }
+
+        /* Keyframes for the pulsing digital grid */
+        @keyframes breathing-grid {
+            0%, 100% { opacity: 0.1; background-size: 40px 40px; }
+            50% { opacity: 0.15; background-size: 42px 42px; }
+        }
+
+        /* Digital Grid Overlay (using pseudo-element) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            
+            /* Fine grid pattern in neon cyan */
+            background-image: 
+                linear-gradient(to right, rgba(0, 255, 255, 0.15) 1px, transparent 1px), 
+                linear-gradient(to bottom, rgba(0, 255, 255, 0.15) 1px, transparent 1px);
+            background-size: 40px 40px; 
+            z-index: -1;
+            
+            /* Apply breathing animation */
+            animation: breathing-grid 8s ease-in-out infinite; 
+        }
+        
+        /* Subtle Radial Glow for Depth */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vh;
+            height: 60vh;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+
+        .main {
+            width: 100%;
+            position: relative;
+        }
+
+        /* --- Navigation Bar Styling --- */
+        .navbar {
+            width: 100%;
+            height: 70px;
+            background: rgba(0, 0, 0, 0.7); 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            box-sizing: border-box;
+            position: fixed; 
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 255, 255, 0.3); /* Neon Navbar Shadow */
+        }
+
+        .logo {
+            color: var(--neon-cyan); 
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px var(--glow-cyan);
+        }
+
+        .menu ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            padding: 8px 15px;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .menu ul li a:hover {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--glow-cyan);
+        }
+        
+        /* --- Main Content Card (Enhanced Glassmorphism) --- */
+        .content {
+            margin-top: 150px; 
+            background: var(--card-bg); /* Use subtle transparent background */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 60px 40px; 
+            border-radius: 20px; 
+            max-width: 850px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.1); 
+            border: 1px solid rgba(0, 255, 255, 0.2); /* Thin neon border */
+            transition: box-shadow 0.4s ease;
+        }
+
+        .content:hover {
+            box-shadow: 0 0 40px var(--glow-cyan), 0 0 80px rgba(0, 255, 255, 0.1);
+        }
+
+        .content h1 {
+            font-size: 3.2rem;
+            color: #fff;
+            text-shadow: 0 0 18px var(--glow-cyan); /* Stronger glow */
+            margin-bottom: 30px;
+            font-weight: 800; 
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .content h1 span {
+            color: var(--neon-cyan);
+        }
+
+        .content p.par {
+            font-size: 1.05rem;
+            color: #b3d9ff; /* Lighter blue for readability */
+            line-height: 1.8;
+            margin: 0 auto 40px auto;
+            max-width: 700px;
+        }
+
+        /* Predict Button Styling - Neon Cyan with Fuchsia Hover */
+        .cn {
+            background: var(--neon-cyan);
+            color: var(--primary-dark);
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            border-radius: 35px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 20px var(--glow-cyan); 
+            text-transform: uppercase;
+        }
+
+        .cn:hover {
+            background: var(--neon-fuchsia); /* Hover to Fuchsia */
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--glow-fuchsia), 0 0 50px rgba(255, 51, 204, 0.4);
+        }
+
+        .cn a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* --- Chatbot Specific Styles --- */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); } 
+            100% { transform: translateY(0px); }
+        }
+
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 2000;
+            transition: all 0.3s ease;
+        }
+
+        #chat-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--neon-cyan); /* Neon Cyan Button */
+            color: var(--primary-dark);
+            border: none;
+            cursor: pointer;
+            font-size: 30px; 
+            box-shadow: 0 0 15px var(--glow-cyan);
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+            animation: float 3.5s ease-in-out infinite; 
+        }
+
+        #chat-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px var(--glow-cyan);
+        }
+
+        /* INCREASED CHAT WINDOW SIZE (480x650) */
+        #chat-window {
+            width: 480px; 
+            height: 650px; 
+            background: #10101a; /* Darker background for chat */
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9), 0 0 15px var(--glow-cyan);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        #chat-window.open {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: all;
+        }
+
+        .chat-header {
+            background: linear-gradient(90deg, #00BFFF, var(--neon-cyan)); /* Blue to Cyan gradient */
+            padding: 15px;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-header div {
+            font-size: 0.8rem; 
+            font-weight: 400; 
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        #chat-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        /* Custom scrollbar for futuristic feel */
+        #chat-messages::-webkit-scrollbar { width: 6px; }
+        #chat-messages::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 3px; }
+        #chat-messages::-webkit-scrollbar-track { background: #1a1a1a; }
+
+        .message {
+            margin-bottom: 10px;
+            max-width: 85%; 
+            padding: 10px 15px;
+            border-radius: 15px;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+
+        .user-message {
+            background: var(--neon-cyan); /* User messages are cyan */
+            color: var(--primary-dark);
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+            text-align: left; 
+            box-shadow: 0 2px 5px var(--glow-cyan);
+        }
+
+        .bot-message {
+            background: #202030; /* Dark blue background for bot */
+            color: #e6e6ff;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        /* Ensure markdown lists render clearly in bot messages */
+        .bot-message ul, .bot-message ol {
+            padding-left: 20px;
+            margin-top: 8px;
+            margin-bottom: 0;
+        }
+        .bot-message li {
+            margin-bottom: 5px;
+        }
+
+        #chat-input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        #chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            background: #1a1a25; /* Input field background */
+            color: var(--neon-cyan);
+            outline: none;
+            margin-right: 10px;
+            font-family: 'Poppins', sans-serif;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        #chat-input:focus {
+            box-shadow: 0 0 5px var(--glow-cyan);
+        }
+
+        #send-button {
+            background: var(--neon-fuchsia); /* Fuchsia send button */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            box-shadow: 0 0 10px var(--glow-fuchsia);
+        }
+
+        #send-button:hover {
+            background: #FF66CC;
+        }
+
+        /* Loading Indicator */
+        .loading-dot {
+            height: 8px;
+            width: 8px;
+            background-color: var(--neon-cyan);
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 0 20px;
+            }
+            .content {
+                margin-top: 100px;
+                padding: 40px 20px;
+                max-width: 90%;
+            }
+            .content h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 550px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 15px 20px;
+                align-items: flex-start;
+            }
+            .menu {
+                margin-top: 10px;
+                width: 100%;
+                text-align: center;
+            }
+            .menu ul {
+                justify-content: center;
+                width: 100%;
+            }
+            .content {
+                margin-top: 150px; 
+            }
+            .chatbot-container {
+                right: 15px;
+                bottom: 15px;
+            }
+            /* ADJUSTED MOBILE CHAT WINDOW SIZE */
+            #chat-window {
+                width: 95vw;
+                height: 80vh; 
+                max-height: 650px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="navbar">
+            <div class="icon">
+                <h2 class="logo">E-GUIDE</h2>
+            </div>
+
+            <div class="menu">
+                <ul>
+                    <li><a href="/">HOME</a></li>
+                    <li><a href="/about">ABOUT</a></li>
+                </ul>
+            </div>
+        </div> 
+
+        <div class="content">
+            <h1>INITIATE <br>PLACEMENT <span>PREDICTION</span> PROTOCOL</h1>
+            <p class="par">
+                A Placement Prediction App is a tool designed to leverage cutting-edge algorithms and synthesized data streams 
+                to provide real-time, actionable insights into your potential career trajectory. Analyze, optimize, and secure 
+                your future with precision. Your success is the only output that matters.
+            </p>
+            <a href="/index" class="cn">EXECUTE PREDICT</a>
+        </div>
+    </div>
+
+    <!-- Chatbot Floating Container -->
+    <div class="chatbot-container">
+        <div id="chat-window">
+            <div class="chat-header">
+                Jeet - Your Placement Success Assistant
+                <div>(Jeet means 'Win' in placement!)</div>
+            </div>
+            <div id="chat-messages">
+                <div class="message bot-message">
+                    Namaste! I am Jeet, your personal Placement Assistant. I am here to help you **win** your placement by answering any queries you have about required skills, CGPA, interview tips, or projects. Ask me anything to get started!
+                </div>
+            </div>
+            <div id="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Query Jeet for placement strategy..." disabled>
+                <button id="send-button" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+        <!-- Chat button with a student/graduate icon and the float animation -->
+        <button id="chat-button" onclick="toggleChat()">🧑‍🎓</button>
+    </div>
+
+    <script>
+        // --- API Setup ---
+        // PASTE YOUR GROQ API KEY HERE TO ENABLE THE CHATBOT'S FULL FUNCTIONALITY
+        const groqApiKey = "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"; 
+        const groqApiUrl = 'https://api.groq.com/openai/v1/chat/completions';
+        
+        // Using the officially recommended stable model
+        const groqModel = 'llama-3.3-70b-versatile'; 
+
+        // --- UI Elements ---
+        const chatWindow = document.getElementById('chat-window');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-button');
+        
+        // SYSTEM INSTRUCTION UPDATED TO ENFORCE BULLET POINTS FOR READABILITY
+        let chatHistory = [{
+            role: "system",
+            content: "You are Jeet, a helpful and encouraging Placement Success Assistant. Your name means 'Win', and your goal is to help the student **win** their placement by answering any queries you have about improving their CGPA, technical skills (Python, Java, ML), projects, and communication for campus placements. Your responses **must be clear, concise, and use markdown bullet points or numbered lists whenever presenting structured information (like criteria, tips, or steps) to maximize readability and precision.** **IMPORTANT RULE: If the user asks you to perform a placement prediction, you must politely decline and strongly redirect them to use the 'PREDICT' tool on the main page, as that is the official predictor.**"
+        }];
+        let isTyping = false;
+
+
+        function toggleChat() {
+            chatWindow.classList.toggle('open');
+            if (chatWindow.classList.contains('open')) {
+                chatInput.focus();
+                // Enable input field when chat opens
+                chatInput.disabled = false; 
+                scrollToBottom();
+            } else {
+                 // Disable input field when chat closes
+                chatInput.disabled = true;
+            }
+        }
+
+        // Event listener for Enter key on input field
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !isTyping) {
+                sendMessage();
+            }
+        });
+
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function displayMessage(content, role) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', role === 'user' ? 'user-message' : 'bot-message');
+            // Use innerHTML to allow for markdown formatting like bolding and lists
+            messageDiv.innerHTML = markdownToHtml(content); 
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+            return messageDiv;
+        }
+
+        function showLoadingIndicator() {
+            const loadingMessage = displayMessage('', 'bot-message');
+            loadingMessage.id = 'loading-indicator';
+            loadingMessage.innerHTML = `
+                <div style="text-align: left;">
+                    <span class="loading-dot"></span>
+                    <span class="loading-dot"></span>
+                    <span class="loading-dot"></span>
+                </div>
+            `;
+            scrollToBottom();
+        }
+
+        function hideLoadingIndicator() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+        }
+        
+        // Simple Markdown to HTML converter for chat window to support lists/bolding
+        function markdownToHtml(markdown) {
+            // Convert bolding: **text** or __text__ to <b>text</b>
+            let html = markdown.replace(/\*\*(.*?)\*\*|__(.*?)__/g, '<b>$1$2</b>');
+
+            // Convert lists (simple bullet points for chat)
+            html = html.replace(/^\s*-\s+(.*)/gm, '<li>$1</li>');
+            html = html.replace(/<li>.*<\/li>/s, '<ul>$&</ul>'); 
+
+            // Convert newlines to breaks for paragraph separation
+            html = html.replace(/\n/g, '<br>');
+
+            return html;
+        }
+
+
+        async function sendMessage() {
+            const userText = chatInput.value.trim();
+            if (userText === "" || isTyping) return;
+
+            // 1. Update UI for user message
+            isTyping = true;
+            chatInput.value = '';
+            chatInput.disabled = true;
+            displayMessage(userText, 'user');
+            showLoadingIndicator();
+
+            // 2. Add user message to history
+            chatHistory.push({ role: "user", content: userText });
+
+            // 3. Call Groq API
+            try {
+                const botResponseText = await callGroqAPI(chatHistory);
+                
+                // 4. Update UI and history with bot response
+                hideLoadingIndicator();
+                displayMessage(botResponseText, 'bot');
+                chatHistory.push({ role: "assistant", content: botResponseText });
+
+            } catch (error) {
+                // IMPORTANT: Log the full error object for debugging
+                console.error("Groq API Error:", error); 
+                hideLoadingIndicator();
+                displayMessage("ERROR: Connection terminated. Jeet is offline. Please check your API key or network connection.", 'bot');
+
+            } finally {
+                // 5. Reset state
+                isTyping = false;
+                chatInput.disabled = false;
+                chatInput.focus();
+            }
+        }
+
+        async function callGroqAPI(messages) {
+            if (!groqApiKey) {
+                console.warn("Groq API Key is not configured. Using placeholder response.");
+                await new Promise(resolve => setTimeout(resolve, 1500)); 
+                return "ACCESS DENIED. My core processing unit requires a valid API key to provide advanced placement strategies. Please configure it to proceed.";
+            }
+            
+            const maxRetries = 3;
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                try {
+                    const response = await fetch(groqApiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${groqApiKey}`
+                        },
+                        body: JSON.stringify({
+                            model: groqModel,
+                            messages: messages,
+                            temperature: 0.7,
+                            max_tokens: 500,
+                        })
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        return result.choices[0].message.content.trim();
+                    } else if (response.status === 429 && attempt < maxRetries - 1) {
+                        // Implement exponential backoff for rate limiting
+                        const delay = Math.pow(2, attempt) * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        // Continue to the next attempt
+                    } else {
+                        const errorData = await response.json();
+                        throw new Error(`API call failed: ${response.status} - ${errorData.error.message}`);
+                    }
+                } catch (error) {
+                    if (attempt === maxRetries - 1) {
+                        throw error; // Throw error on last attempt
+                    }
+                    // If it's a network error, apply backoff too
+                    const delay = Math.pow(2, attempt) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+    </script>
+</body>
+</html>

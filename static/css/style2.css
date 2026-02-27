@@ -1,0 +1,149 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --danger-color: #ff5f6d;
+    --background-blur: rgba(255, 255, 255, 0.12);
+    --text-color: #ecf0f1;
+    --glow-green: 0 0 15px rgba(46, 204, 113, 0.7);
+    --glow-red: 0 0 15px rgba(255, 95, 109, 0.7);
+}
+
+/* Background */
+body, html {
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    overflow: hidden;
+}
+
+/* Container Card */
+.container {
+    width: 90%;
+    max-width: 600px;
+    background: var(--background-blur);
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    text-align: center;
+    padding: 50px 40px;
+    animation: fadeIn 1.2s ease-in-out;
+}
+
+/* Header */
+header {
+    margin-bottom: 25px;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* Sub-heading */
+h2 {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+/* Result Box */
+.output {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 10px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.output:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+}
+
+.output p {
+    font-size: 1.2rem;
+    margin: 8px 0;
+    font-weight: 500;
+}
+
+/* Dynamic Placement Colors */
+.placed {
+    color: var(--secondary-color);
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-shadow: var(--glow-green);
+    animation: glowGreen 2s infinite alternate;
+}
+
+.not-placed {
+    color: var(--danger-color);
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-shadow: var(--glow-red);
+    animation: glowRed 2s infinite alternate;
+}
+
+/* Back Button */
+.back-btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 12px 28px;
+    background: linear-gradient(to right, #00d2ff, #3a7bd5);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.back-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowGreen {
+    from { text-shadow: 0 0 5px #2ecc71; }
+    to { text-shadow: 0 0 25px #2ecc71; }
+}
+
+@keyframes glowRed {
+    from { text-shadow: 0 0 5px #ff5f6d; }
+    to { text-shadow: 0 0 25px #ff5f6d; }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .container {
+        padding: 30px 20px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    .output p {
+        font-size: 1rem;
+    }
+}
