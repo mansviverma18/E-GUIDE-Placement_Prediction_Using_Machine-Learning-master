@@ -97,18 +97,6 @@ The models' performance is evaluated using various metrics, including:
 - F1 Score: 0.9168
 - Roc_Auc_Score: 0.9842
 
-**CONFUSION MATRIX**:
-
-<img src="static/images/confusion_matrix.png " alt="Alt text" width="400" height="400">
-
-**ROC CURVE**:
-
-<img src="static/images/roc_curve.png " alt="Alt text" width="500" height="400">
-
-**FEATURE IMPORTANCE**:
-
-<img src="static/images/feature_importance.png " alt="Alt text">
-
 ## Flask App
 
 The trained models are deployed using a Flask web application. The app allows users to input student details and receive predictions for placement probability and expected salary.
