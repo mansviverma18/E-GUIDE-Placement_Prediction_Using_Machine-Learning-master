@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLACEMENT PREDICTION</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base styles and dark theme setup */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            /* Background matches the color shown in the reference image */
+            background: #4e54c8; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            /* Using a slightly darker transparent background for the container */
+            background: rgba(40, 45, 100, 0.4); 
+            border-radius: 25px;
+            padding: 40px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            animation: fadeIn 0.7s ease-in-out;
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            position: relative; /* CRITICAL: Allows absolute positioning of the Home button inside */
+        }
+
+        header h1 {
+            text-align: center;
+            margin-bottom: 35px;
+            color: #fff;
+            letter-spacing: 1px;
+            font-weight: 700;
+            font-size: 32px;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        
+        /* --- HOME BUTTON STYLES --- */
+        .home-button {
+            position: absolute;
+            top: 25px; 
+            right: 30px; 
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.15); /* Slightly visible glass background */
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            z-index: 10;
+            font-size: 0.9rem;
+            text-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
+        .home-button:hover {
+            background: rgba(0, 210, 255, 0.5); /* Matching the blue gradient hover effect */
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+            border-color: rgba(0, 210, 255, 0.8);
+        }
+        /* --- END HOME BUTTON STYLES --- */
+
+
+        /* Grid layout */
+        .form-grid {
+            display: grid;
+            gap: 25px;
+            /* Use a maximum of 4 columns (1fr each) */
+            grid-template-columns: repeat(4, 1fr); 
+        }
+        
+        .form-group label {
+            color: #fff;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block; 
+            font-size: 0.95rem;
+        }
+
+        /* --- REFINED INPUT/SELECT STYLES --- */
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            border: none;
+            /* Adjusting vertical padding slightly to ensure alignment consistency */
+            padding: 12px 16px; 
+            border-radius: 15px;
+            
+            background: #2a3064; 
+            color: #FFFFFF; 
+            
+            outline: none;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.5), 0 0 5px rgba(255,255,255,0.05);
+            
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500; 
+            /* Added for consistent sizing and alignment, although select needs custom removal below */
+            box-sizing: border-box; 
+        }
+        
+        /* Specific alignment fix for SELECT elements to align them vertically with INPUTs */
+        .form-group select {
+            /* Removing default appearance ensures the height matches other inputs perfectly */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            height: 47px; /* Explicitly set height based on 12px padding + font-size */
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+
+        .form-group input::placeholder {
+            color: #d0d0d0;
+            opacity: 0.9; 
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            box-shadow: 0 0 0 3px rgba(135, 140, 255, 0.5), inset 0 3px 6px rgba(0,0,0,0.5);
+            transform: scale(1.01);
+            background: #394076; 
+        }
+
+        .form-group select option {
+            background-color: #2a3064; 
+            color: #fff;
+        }
+        
+        /* Custom dropdown arrow for themed select boxes */
+        select {
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.748 3.908-3.748c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615l-4.698 4.507c-0.272 0.264-0.586 0.413-0.908 0.413s-0.636-0.149-0.908-0.413l-4.698-4.507c-0.408-0.418-0.436-1.17 0-1.615z" fill="%23FFFFFF"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+        /* --- END REFINED INPUT/SELECT STYLES --- */
+
+        /* Button */
+        button {
+            width: 100%;
+            margin-top: 40px;
+            padding: 16px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(to right, #00d2ff, #3a7bd5);
+            color: white;
+            font-size: 19px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 8px 25px rgba(0,210,255,0.6);
+        }
+
+        /* --- LAYOUT FIXES: Centering the Backlogs field --- */
+        .grid-span-2 {
+            /* Ensures the element starts at column 2 and spans 2 columns, perfectly centering it */
+            grid-column: 2 / span 2; 
+        }
+        
+        .grid-span-2 input {
+            max-width: 100%; 
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) { 
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr); 
+            }
+            .grid-span-2 {
+                /* When there are only 2 columns, spanning 2 from the start (column 1) makes it full width. */
+                grid-column: 1 / span 2; 
+            }
+            .grid-span-2 input {
+                max-width: 100%; 
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            /* Adjust header margin on mobile to prevent overlap with the Home button */
+            header h1 {
+                font-size: 26px;
+                margin-top: 20px; 
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-span-2 {
+                /* Reset for mobile to span 1 column */
+                grid-column: span 1; 
+            }
+
+            /* Move home button slightly for better mobile positioning */
+            .home-button {
+                top: 15px;
+                right: 15px;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- HOME BUTTON ADDED HERE -->
+        <a href="/" class="home-button">
+            Home
+        </a>
+
+        <header>
+            <h1>PREDICT YOUR PLACEMENT</h1>
+        </header>
+
+        <form action="{{ url_for('predict') }}" method="GET">
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Branch</label>
+                    <select name="branch" required>
+                        <option value="" disabled selected>Select branch</option>
+                        <option value="CSE">CSE (Computer Science and Engineering)</option>
+                        <option value="CSE-AI">CSE-AI (Artificial Intelligence)</option>
+                        <option value="ML">CSE-AIML (Artificial Intelligence and Machine Learning)</option>
+                        <option value="CS">CS (Computer Science)</option>
+                        <option value="CSE-DS">CSE-DS (Data Science)</option>
+                        <option value="CS-IT">CS-IT (Information Technology)</option>
+                        <option value="ECE">ECE (Electrical and Electronics Engineering)</option>
+                        <option value="EN">ELECTRICAL ENGINEERING</option>
+                        <option value="ME">MECHANICAL ENGINEERING</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>CGPA</label>
+                    <input type="number" name="cgpa" step="0.01" min="0" max="10" placeholder="e.g., 8.5" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Skills (comma separated)</label>
+                    <input type="text" name="skills" placeholder="Python, ML, Java..." required>
+                </div>
+
+                <div class="form-group">
+                    <label>Internship</label>
+                    <select name="internship">
+                        <option value="1">Yes</option>
+                        <option value="0" selected>No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Hackathon</label>
+                    <select name="hackathon">
+                        <option value="1">Yes</option>
+                        <option value="0" selected>No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Major Projects</label>
+                    <input type="number" name="projects" min="0" placeholder="e.g., 2" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Certifications</label>
+                    <input type="number" name="workshops" min="0" placeholder="e.g., 3" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Mini Projects</label>
+                    <input type="number" name="mini_projects" min="0" placeholder="e.g., 5" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Communication Rating</label>
+                    <input type="number" name="communication_skills" min="0" max="10" step="0.1" placeholder="Rating out of 10" required>
+                </div>
+
+                <div class="form-group">
+                    <label>12th Percentage</label>
+                    <input type="number" name="tw_percentage" min="0" max="100" step="0.01" placeholder="e.g., 85.5" required>
+                </div>
+
+                <div class="form-group">
+                    <label>10th Percentage</label>
+                    <input type="number" name="te_percentage" min="0" max="100" step="0.01" placeholder="e.g., 90.2" required>
+                </div>
+
+                <!-- FIX APPLIED HERE -->
+                <div class="form-group grid-span-2">
+                    <label>Backlogs</label>
+                    <input type="number" name="backlogs" min="0" placeholder="Number of backlogs" required>
+                </div>
+                
+            </div>
+
+            <button type="submit">Predict Placement</button>
+        </form>
+    </div>
+
+</body>
+</html>

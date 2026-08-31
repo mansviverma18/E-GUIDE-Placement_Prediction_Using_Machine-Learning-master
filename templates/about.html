@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - PLACEMENT PREDICTION SYSTEM</title>
+    
+    <!-- Google Font: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Moving Background Animation (Kept for consistency) --- */
+        @keyframes moveBackground {
+            from {
+                background-position: 0 0;
+            }
+            to {
+                background-position: 1000px 1000px; /* Slow diagonal movement */
+            }
+        }
+
+        /* --- Base Setup and Background --- */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            
+            /* Apply moving star background */
+            background-color: #0d1117; 
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 50px 100px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(4px 4px at 90px 40px, #eee, rgba(0,0,0,0));
+                
+            background-size: 500px 500px; /* Size of the repeat pattern */
+            background-attachment: fixed;
+            animation: moveBackground 120s linear infinite; /* Apply the slow animation */
+
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Navbar (Consistent Style) --- */
+        .navbar {
+            width: 100%;
+            height: 70px;
+            background: rgba(0, 0, 0, 0.5); 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            box-sizing: border-box;
+            position: fixed; 
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .logo {
+            color: #ff7200;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+        
+        .menu ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            padding: 8px 15px;
+            transition: color 0.3s ease;
+        }
+
+        .menu ul li a:hover,
+        .menu ul li a[href="/about"] {
+            color: #ff7200;
+        }
+
+        /* --- Main Content Layout --- */
+        .content {
+            padding: 100px 40px 40px; 
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column; /* Allows vertical stacking of cards */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        /* --- Glassmorphic Card Style --- */
+        .system-card {
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-align: left; /* Ensures all main text is left-aligned */
+        }
+        
+        .system-card h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00d2ff;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+            text-align: center;
+        }
+
+        .system-card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ff7200;
+            margin-top: 25px;
+            border-bottom: 2px solid rgba(255, 114, 0, 0.3);
+            padding-bottom: 5px;
+        }
+
+        .par {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+        }
+        
+        /* --- Confirmed Styling for Bold Text (Strong) --- */
+        .par strong {
+            color: #ffb700; /* Brighter orange/yellow for emphasis */
+            font-weight: 800; /* Ensure maximum boldness */
+            text-shadow: 0 0 5px rgba(255, 183, 0, 0.4); /* Subtle glow effect */
+            /* Inherits left alignment from parent .par */
+        }
+        
+        .par ul {
+            list-style: disc;
+            padding-left: 25px; 
+        }
+        .par li {
+            margin-bottom: 8px;
+            color: #ccc;
+            text-align: left; 
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+             .navbar {
+                padding: 0 20px;
+            }
+             .content {
+                padding: 100px 20px 20px;
+            }
+            .system-card {
+                padding: 20px;
+                margin: 10px auto;
+            }
+            .system-card h1 {
+                font-size: 2rem;
+            }
+            .system-card h2 {
+                font-size: 1.3rem;
+            }
+            .par {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main">
+        <div class="navbar">
+            <div class="icon">
+                <h2 class="logo">PLACEMENT PREDICTION</h2>
+            </div>
+
+            <div class="menu">
+                <ul>
+                    <li><a href="/">HOME</a></li> 
+                    <li><a href="/about">ABOUT</a></li>
+                </ul>
+            </div>
+        </div> 
+        
+        <div class="content">
+            <div class="system-card">
+                <h1>PLACEMENT PREDICTION SYSTEM: OUR VISION</h1>
+                
+                <p class="par">
+                    The **Placement Prediction System** is engineered to harness the power of data science to guide students through their career journey. Our goal is not merely to predict placement success, but to provide every user with **actionable insights** based on their academic and skill profile to achieve success.
+                </p>
+
+                <h2>🚀 Methodology: How We Predict</h2>
+                <p class="par">
+                    Our system employs a sophisticated **Machine Learning model** to analyze a range of **key input factors**. This model is trained on a large and diverse dataset of historical placement records to ensure the predictions are both accurate and highly reliable.
+                </p>
+                <div class="par">
+                    <ul>
+                        <li><strong>Academic Performance:</strong> Evaluates CGPA, 10th and 12th percentages, and the presence of current backlogs.</li>
+                        <li><strong>Technical Readiness:</strong> Assesses the number of major projects, mini-projects, and specialized certifications completed.</li>
+                        <li><strong>Industry Exposure:</strong> Measures participation in internships and competitive hackathons.</li>
+                        <li><strong>Soft Skills:</strong> The Communication Skills rating, which is a critical factor in interview performance.</li>
+                    </ul>
+                </div>
+
+                <h2>🎯 Goal Setting and Improvement</h2>
+                <p class="par">
+                    The prediction result is presented in a **dashboard** that highlights which factors are **most significantly impacting** your chances (Feature Impact Analysis). If the outcome is 'Not Placed,' the system strategically provides a detailed **Personalized Action Plan** aimed at targeting your weak areas, allowing you to boost your profile effectively.
+                </p>
+
+                <h2>🔒 Data Security and Privacy</h2>
+                <p class="par">
+                    We prioritize the confidentiality and security of user data. All information you submit is used strictly for generating predictions and personalized recommendations. Data utilized to improve the model is processed **anonymously** and in aggregate.
+                </p>
+            </div>
+        </div>
+    </div> 
+    
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+</body>
+</html>

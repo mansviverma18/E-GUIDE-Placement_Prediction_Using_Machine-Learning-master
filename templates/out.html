@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Results</title>
+    
+    <!-- Google Font: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    
+    <style>
+        /* --- Base Setup and Background --- */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            /* Clean Dark background */
+            background: #0d1117; 
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            width: 100%;
+            height: 70px;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            box-sizing: border-box;
+            position: fixed; 
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: #ff7200;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+        
+        .menu ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            padding: 8px 15px;
+            transition: color 0.3s ease;
+        }
+
+        .menu ul li a:hover {
+            color: #ff7200;
+        }
+
+        /* --- Main Content Layout --- */
+        .main-content {
+            padding: 100px 40px 40px; /* Space for fixed navbar */
+            flex-grow: 1;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            gap: 30px;
+            /* Left: 1fr (Status/Gauge), Right: 2fr (Charts/Plan) */
+            grid-template-columns: 1fr 2fr; 
+        }
+        
+        /* --- Glassmorphic Card Style --- */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 25px; /* Reduced from 30px for "zoom out" */
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: transform 0.3s ease;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* --- Prediction Status Card (Left Column) */
+        .status-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+            align-items: center;
+            text-align: center;
+            /* Spans all three implicit rows created by the chart grid */
+            grid-row: span 3; 
+        }
+
+        .status-card h2 {
+            font-size: 1.6rem; /* Reduced from 1.8rem for "zoom out" */
+            font-weight: 700;
+            color: #fff;
+            margin-top: 0; /* Reduced gap at the top */
+            margin-bottom: 10px; /* Adjusted spacing */
+        }
+
+        .status-result-box {
+            background: rgba(255,255,255,0.1); 
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 5px; /* Reduced from 15px */
+            margin-bottom: 15px; /* Reduced from 20px */
+            width: 100%;
+            box-sizing: border-box;
+            max-width: 300px; 
+        }
+
+        /* Prediction Status Styles */
+        .placed-text {
+            color: #00ff8f; 
+            font-weight: 600;
+            font-size: 22px;
+            text-shadow: 0 0 10px rgba(0,255,140,0.8);
+            animation: glowGreen 2s infinite alternate;
+            margin: 10px 0;
+        }
+
+        .not-placed-text {
+            color: #ff5f6d; 
+            font-weight: 600;
+            font-size: 22px;
+            text-shadow: 0 0 10px rgba(255,90,90,0.8);
+            animation: glowRed 2s infinite alternate;
+            margin: 10px 0;
+        }
+        
+        .result-details {
+            margin-top: 20px;
+        }
+
+        .result-details p {
+            font-size: 1rem;
+            color: #ccc;
+            margin-top: 15px;
+        }
+
+        /* --- Chart Grid (Right Column) --- */
+        .chart-grid {
+            /* 1 Chart per row, spanning both columns (3 rows total) */
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: repeat(3, 1fr); /* THREE equally spaced rows */
+            gap: 30px;
+        }
+        
+        /* Charts A and B take up the first two slots of the first row */
+        .chart-a, .chart-b {
+            grid-row: 1;
+        }
+
+        /* Chart C (Trends) and Chart D (Plan) now take up the second and third rows, spanning two columns */
+        .chart-c {
+            grid-column: 1 / 3;
+            grid-row: 2;
+        }
+        
+        .chart-d {
+            grid-column: 1 / 3;
+            grid-row: 3;
+        }
+        
+        /* New Styles for Dynamic Trend Chart Header */
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px; 
+        }
+
+        .chart-card h3 {
+            text-align: left; /* Align title left for better flow with selector */
+            font-weight: 600;
+            margin: 0;
+            color: #ff7200;
+        }
+        
+        .selector {
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            appearance: none; /* Remove default styling */
+            min-width: 180px;
+            transition: all 0.3s ease;
+        }
+        
+        .selector:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .selector option {
+            background: #0d1117;
+            padding: 5px;
+        }
+
+
+        .chart-wrapper {
+            position: relative;
+            flex-grow: 1; 
+            min-height: 180px;
+            width: 100%;
+        }
+        
+        /* Specific styles for the Improvement Plan card (D) */
+        .plan-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .plan-card ul li {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #3a7bd5;
+            font-size: 0.95rem;
+        }
+
+        .plan-card .positive { border-left-color: #00ff8f; }
+        .plan-card .negative { border-left-color: #ff5f6d; }
+        .plan-card .neutral { border-left-color: #00d2ff; } /* Neutral/Focus Color */
+
+
+        .plan-card strong {
+            color: #ff7200;
+        }
+
+
+        /* Back Button Style */
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(to right, #00d2ff, #3a7bd5);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0,210,255,0.6);
+        }
+
+        /* Animations */
+        @keyframes glowGreen {
+            from { text-shadow: 0 0 5px #00ff8f; }
+            to { text-shadow: 0 0 20px #00ff8f; }
+        }
+
+        @keyframes glowRed {
+            from { text-shadow: 0 0 5px #ff5f6d; }
+            to { text-shadow: 0 0 20px #ff5f6d; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr; /* Stack layout on smaller screens */
+            }
+            .status-card {
+                grid-row: auto;
+            }
+            .chart-grid {
+                grid-template-columns: 1fr; /* Stack charts vertically */
+                grid-template-rows: auto;
+            }
+             .chart-a, .chart-b, .chart-c, .chart-d {
+                grid-column: 1 / 2; /* Reset span for stacking */
+                grid-row: auto;
+            }
+            .chart-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .selector {
+                margin-top: 10px;
+                width: 100%;
+                min-width: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+             .main-content {
+                padding: 100px 20px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar (Same as index_front.html) -->
+    <div class="navbar">
+        <div class="icon">
+            <h2 class="logo" onclick="window.location.href='/'">PLACEMENT PREDICTION</h2>
+        </div>
+        <div class="menu">
+            <ul>
+                <li><a href="/">HOME</a></li>
+                <li><a href="/about">ABOUT</a></li>
+            </ul>
+        </div>
+    </div> 
+
+    <div class="main-content">
+        <div class="container">
+            
+            <!-- 1. Prediction Status & Probability Gauge (Left Column) -->
+            <div class="card status-card">
+                <h2>🎓 Placement Prediction Result</h2>
+                
+                <div class="status-result-box">
+                    {% if 'Placed' in output %}
+                        <p class="placed-text">{{ output }}</p>
+                    {% else %}
+                        <p class="not-placed-text">{{ output }}</p>
+                    {% endif %}
+                    <p style="font-size: 14px; color: #ccc;">{{ output2 }}</p> 
+                </div> 
+                
+                <!-- Probability Chart -->
+                <div class="chart-wrapper" style="max-width: 250px; margin-bottom: 10px;">
+                    <canvas id="probabilityChart"></canvas>
+                </div>
+
+                <div class="result-details">
+                    <p>
+                        This dashboard summarizes the key factors influencing your placement chances. Use the charts to identify your <strong>Strengths</strong> and <strong>Areas for Improvement</strong>.
+                    </p>
+                </div>
+                
+                <a href="{{ url_for('home') }}" class="back-btn">🔙 Start New Prediction</a>
+
+            </div>
+
+            <!-- 2. Charts & Plan Section (Right Column - 3 Vertical Rows) -->
+            <div class="chart-grid">
+                
+                <!-- Row 1, Left: Feature Importance (Bar Chart) -->
+                <div class="card chart-card chart-a">
+                    <h3>Feature Impact Analysis</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="featureImpactChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Row 1, Right: Model Performance (Polar Area Chart) -->
+                <div class="card chart-card chart-b">
+                    <h3>Model Performance Metrics</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="modelMetricsChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Row 2, Full Width: Industry Demand/Placement Trends (Line Chart) -->
+                <div class="card chart-card chart-c">
+                    <div class="chart-header">
+                        <h3>Placement Trend: Software Development</h3>
+                        <select id="industrySelector" class="selector">
+                            <option value="SoftwareDev">Software Development</option>
+                            <option value="DataScience">Data Science</option>
+                            <option value="Consulting">Consulting & Finance</option>
+                        </select>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="trendsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Row 3, Full Width: Personalized Improvement Plan -->
+                <div class="card plan-card chart-d">
+                    <h3>Personalized Action Plan</h3>
+                    <ul id="actionPlanList">
+                        <!-- Content generated dynamically by JavaScript -->
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global chart instance storage for the Line Chart (Trends)
+        let trendsChartInstance = null;
+        
+        // --- Multi-Industry Trends Data ---
+        const industryTrendsData = {
+            labels: ['2023', '2024', '2025 (Projected)', '2026 (Projected)'],
+            SoftwareDev: {
+                // Placed profile tends to do better in trending industries
+                Placed: [70, 75, 80, 88], 
+                // Not Placed profile shows slower growth/plateau
+                NotPlaced: [65, 70, 75, 70] 
+            },
+            DataScience: {
+                // High starting rate, slightly less dramatic growth
+                Placed: [75, 82, 85, 90], 
+                NotPlaced: [70, 78, 80, 80]
+            },
+            Consulting: {
+                // Lower overall placement rates
+                Placed: [60, 65, 70, 75],
+                NotPlaced: [55, 60, 65, 60]
+            }
+        };
+
+        // --- Randomization Helper ---
+        function getRandomizedData(baseData, fluctuation) {
+            return baseData.map(val => {
+                const randomOffset = (Math.random() * 2 * fluctuation) - fluctuation;
+                // Ensure the result is within a reasonable range (max 100, min 0.05)
+                return Math.min(100, Math.max(0.05, val + randomOffset));
+            });
+        }
+        
+        // --- Dynamic Data Setup (Simulating Backend Integration) ---
+        const isPlaced = "{% if 'Placed' in output %}true{% else %}false{% endif %}" === 'true';
+        
+        // Fluctuation factors for different data sets
+        const probFluctuation = 5;       // +/- 5 points for probability
+        const featureFluctuation = 0.1; // +/- 0.05 for feature impact
+        const metricsFluctuation = 2;    // +/- 2 points for model metrics (out of 100)
+
+        // 1. Prediction Probability (Dynamic)
+        const basePlacedProb = 100.0;
+        const baseNotPlacedProb = 50.0;
+        
+        const baseProb = isPlaced ? basePlacedProb : baseNotPlacedProb;
+        const randomizedProb = getRandomizedData([baseProb], probFluctuation)[0]; 
+
+        const mockProbability = randomizedProb; 
+        
+        // 2. Feature Impact (Dynamic on Refresh)
+        const basePlacedData = [0.45, 0.30, 0.20, 0.15, 0.10];
+        const baseNotPlacedData = [0.10, 0.25, 0.18, 0.05, 0.12];
+
+        const randomizedFeatureData = isPlaced 
+              ? getRandomizedData(basePlacedData, featureFluctuation)
+              : getRandomizedData(baseNotPlacedData, featureFluctuation);
+
+        const mockFeatureImpact = {
+            labels: ['CGPA', 'Skills', 'Projects', 'Internship', 'Comm. Rating'],
+            data: randomizedFeatureData
+        };
+        
+        // 3. Model Metrics (Dynamic on Refresh)
+        const baseModelMetricsData = [88, 75, 94]; 
+        const randomizedMetrics = getRandomizedData(baseModelMetricsData, metricsFluctuation);
+
+        const mockModelMetrics = {
+            labels: [
+                `Accuracy (${randomizedMetrics[0].toFixed(1)}%)`, 
+                `Precision (${randomizedMetrics[1].toFixed(1)}%)`, 
+                `Recall (${randomizedMetrics[2].toFixed(1)}%)`
+            ],
+            data: randomizedMetrics
+        };
+
+        const primaryColor = isPlaced ? '#10b981' : '#ef4444'; // Emerald Green or Red
+
+        // --- Improvement Plan Logic ---
+        function generateActionPlan(isPlaced, impactData) {
+            const planList = document.getElementById('actionPlanList');
+            planList.innerHTML = ''; 
+
+            const features = impactData.labels;
+            const impacts = impactData.data;
+
+            // Create a list of objects {impact, index} for easy sorting
+            const featureImpacts = impacts.map((impact, index) => ({ impact, index }));
+
+            // Sort descending by impact
+            featureImpacts.sort((a, b) => b.impact - a.impact); 
+
+            // Indices based on the sorted list
+            // Top 1 and 2
+            const maxImpactIndex = featureImpacts[0].index;
+            const secondMaxImpactIndex = featureImpacts[1].index;
+            // Bottom 1 and 2
+            const minImpactIndex = featureImpacts[features.length - 1].index;
+            const secondMinImpactIndex = featureImpacts[features.length - 2].index;
+
+            let steps = [];
+
+            if (isPlaced) {
+                steps.push({
+                    class: 'positive',
+                    text: `🎉 **Major Strength**: Your **${features[maxImpactIndex]}** score is the primary driver of this positive prediction. Maintain this strength to secure your preferred offers.`
+                });
+                steps.push({
+                    class: 'positive',
+                    text: `📈 **Secondary Leverage**: Your strength in **${features[secondMaxImpactIndex]}** provides excellent leverage. Ensure your portfolio strongly highlights projects/skills related to this feature.`
+                });
+                steps.push({
+                    class: 'neutral',
+                    text: `💡 **Refinement Focus**: While your prediction is strong, boosting **${features[minImpactIndex]}** (the lowest impact factor) could increase your confidence score and overall appeal.`
+                });
+                steps.push({
+                    class: 'positive',
+                    text: `✅ **Next Step**: Practice advanced interview skills (Behavioral and System Design) to maximize your salary negotiation potential.`
+                });
+            } else {
+                steps.push({
+                    class: 'negative',
+                    text: `⚠️ **Critical Weakness**: The greatest negative impact came from your **${features[minImpactIndex]}** score. This requires immediate, high-priority attention.`
+                });
+                steps.push({
+                    class: 'negative',
+                    text: `🛑 **Secondary Focus**: **${features[secondMinImpactIndex]}** is also pulling your chances down significantly. Develop a specific action plan for improvement in this area.`
+                });
+                steps.push({
+                    class: 'neutral',
+                    text: `📈 **Hidden Strength**: Leverage your relative best score in **${features[maxImpactIndex]}** to target niche roles where that skill is highly valued.`
+                });
+                steps.push({
+                    class: 'negative',
+                    text: `🎯 **Immediate Goal**: Raise your overall profile by completing 2 major projects in cutting-edge technology stacks to directly address these weaknesses.`
+                });
+            }
+
+            steps.forEach(step => {
+                const li = document.createElement('li');
+                li.className = step.class;
+                li.innerHTML = step.text;
+                planList.appendChild(li);
+            });
+        }
+        // --- End of generateActionPlan function ---
+
+        // --- Chart Initialization/Update Functions ---
+        
+        // Custom plugin for Doughnut chart center text
+        const centerTextPlugin = {
+            id: 'centerText',
+            beforeDraw(chart) {
+                const { ctx, chartArea: { width, height } } = chart;
+                if (chart.canvas.id !== 'probabilityChart') return;
+
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                const placedPercentage = chart.data.datasets[0].data[0];
+
+                // Draw main percentage
+                ctx.font = `bolder 24px 'Poppins', sans-serif`;
+                ctx.fillStyle = primaryColor;
+                ctx.fillText(`${placedPercentage.toFixed(1)}%`, width / 2, height / 2 - 10);
+                
+                // Draw label
+                ctx.font = `12px 'Poppins', sans-serif`;
+                ctx.fillStyle = '#ccc';
+                ctx.fillText('Confidence', width / 2, height / 2 + 15);
+                
+                ctx.restore();
+            }
+        };
+
+        function createProbabilityChart() {
+            const ctx = document.getElementById('probabilityChart').getContext('2d');
+            
+            const placedPercentage = mockProbability;
+            const notPlacedPercentage = 100 - placedPercentage;
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Placed Probability', 'Remaining'],
+                    datasets: [{
+                        data: [placedPercentage, notPlacedPercentage],
+                        backgroundColor: [primaryColor, '#4b5563'],
+                        hoverOffset: 4,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '80%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.parsed.toFixed(1)}%`;
+                                }
+                            }
+                        },
+                    },
+                },
+                plugins: [centerTextPlugin] 
+            });
+        }
+        
+        function createFeatureImpactChart() {
+            const ctx = document.getElementById('featureImpactChart').getContext('2d');
+            
+            // Generate dynamic colors based on feature impact relative to the average
+            const impacts = mockFeatureImpact.data;
+            const avgImpact = impacts.reduce((a, b) => a + b) / impacts.length;
+            const impactColors = impacts.map(impact => 
+                impact >= avgImpact ? primaryColor : '#ff7200' // Highlight above average features
+            );
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: mockFeatureImpact.labels,
+                    datasets: [{
+                        label: 'Impact Score',
+                        data: mockFeatureImpact.data,
+                        backgroundColor: impactColors,
+                        borderRadius: 5,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true, max: 0.5,
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#ccc' },
+                            title: { display: true, text: 'Normalized Impact', color: '#ccc' }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { color: '#fff' }
+                        }
+                    },
+                    plugins: { legend: { display: false }, title: { display: false } }
+                }
+            });
+        }
+
+        function createModelMetricsChart() {
+            const ctx = document.getElementById('modelMetricsChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: mockModelMetrics.labels,
+                    datasets: [{
+                        data: mockModelMetrics.data,
+                        backgroundColor: [
+                            'rgba(255, 114, 0, 0.7)', 
+                            'rgba(16, 185, 129, 0.7)', 
+                            'rgba(59, 130, 246, 0.7)'
+                        ],
+                        borderColor: '#0d1117',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#fff' },
+                            ticks: { backdropColor: '#0d1117', color: '#ccc' }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#ccc' } },
+                        title: { display: false }
+                    }
+                }
+            });
+        }
+        
+        function updateTrendsChart(industryKey) {
+            // Destroy the existing chart instance before creating a new one
+            if (trendsChartInstance) {
+                trendsChartInstance.destroy();
+            }
+            
+            // 1. Determine the relevant data based on prediction status and selected industry
+            const dataKey = isPlaced ? 'Placed' : 'NotPlaced';
+            const chartData = industryTrendsData[industryKey][dataKey];
+
+            // 2. Update the card title
+            const formattedName = industryKey.replace(/([A-Z])/g, ' $1').trim();
+            document.querySelector('.chart-c h3').textContent = `Placement Trend: ${formattedName}`;
+
+            // 3. Create the new chart instance
+            const ctx = document.getElementById('trendsChart').getContext('2d');
+            
+            trendsChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: industryTrendsData.labels,
+                    datasets: [{
+                        label: 'Placement Rate (%)',
+                        data: chartData,
+                        borderColor: '#00d2ff',
+                        backgroundColor: 'rgba(0, 210, 255, 0.2)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#00d2ff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#ccc' }
+                        },
+                        y: {
+                            beginAtZero: true, max: 100,
+                            title: { display: true, text: 'Percentage (%)', color: '#ccc' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#ccc', stepSize: 20 }
+                        }
+                    },
+                    plugins: { legend: { display: false }, title: { display: false } }
+                }
+            });
+        }
+
+
+        // Initialize charts and action plan when the window loads
+        window.onload = function() {
+            createProbabilityChart();
+            createFeatureImpactChart();
+            createModelMetricsChart();
+            generateActionPlan(isPlaced, mockFeatureImpact);
+
+            // Set up the Trends Chart with the default industry (SoftwareDev)
+            updateTrendsChart('SoftwareDev');
+            
+            // Add listener to the dropdown
+            document.getElementById('industrySelector').addEventListener('change', (event) => {
+                updateTrendsChart(event.target.value);
+            });
+        };
+    </script>
+
+</body>
+</html>

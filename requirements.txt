@@ -1,0 +1,8 @@
+Flask
+Scikit-Learn
+Pandas
+Numpy
+matplotlib
+Seaborn
+requests
+python-dotenv
