@@ -3,9 +3,9 @@
 This project focuses on predicting student placement and salary in campus recruitment using Random Forest classifiers. The goal is to help students and educational institutions understand the factors that influence placement success and expected salary.
 
 ## Final Result
-<img src="static/images/pl1.png" alt="Alt text" width=100%>
-<img src="static/images/pl2.png" alt="Alt text" width=100%>
-<img src="static/images/pl3.png" alt="Alt text" width=100%>
+<img src="static/images/Screenshot%202026-08-31%20153448.png" alt="E-GUIDE home page" width=100%>
+<img src="static/images/Screenshot%202026-08-31%20153500.png" alt="Placement prediction form" width=100%>
+<img src="static/images/Screenshot%202026-08-31%20153518.png" alt="Prediction result page" width=100%>
 
 ## Table of Contents
 - [Overview](#overview)
