@@ -17,7 +17,6 @@ This project focuses on predicting student placement and salary in campus recrui
 - [Evaluation](#evaluation)
 - [Results](#results)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Overview
 
@@ -92,11 +91,11 @@ The models' performance is evaluated using various metrics, including:
 ## Results
 
 ### Placement Prediction Model
-- Accuracy: 88.7%
-- Precision: 0.93
-- Recall: 0.86
-- F1 Score: 0.90
-- Roc_Auc_Score:0.94
+- Accuracy: 93.30%
+- Precision: 0.9303
+- Recall: 0.9038
+- F1 Score: 0.9168
+- Roc_Auc_Score: 0.9842
 
 **CONFUSION MATRIX**:
 
@@ -117,7 +116,3 @@ The trained models are deployed using a Flask web application. The app allows us
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request or open an Issue.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
