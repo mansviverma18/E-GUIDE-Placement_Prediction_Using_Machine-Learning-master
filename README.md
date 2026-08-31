@@ -15,7 +15,6 @@ This project focuses on predicting student placement and salary in campus recrui
 - [Data Preprocessing](#data-preprocessing)
 - [Model Training](#model-training)
 - [Evaluation](#evaluation)
-- [Results](#results)
 - [Contributing](#contributing)
 
 ## Overview
@@ -87,8 +86,6 @@ The models' performance is evaluated using various metrics, including:
 - F1 Score
 - Confusion Matrix
 - Roc_Auc_Score
-
-## Results
 
 ### Placement Prediction Model
 - Accuracy: 93.30%
